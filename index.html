@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gourmet Garden Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --card: #1a1a1a;
+            --accent: #d4af37;
+            --sub: #a0a0a0;
+            --border: #333333;
+            --font-en: 'Montserrat', sans-serif;
+            --font-ar: 'Noto Sans Arabic', sans-serif;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: var(--font-en);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .business-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 0 8px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .business-desc {
+            font-size: 14px;
+            color: var(--sub);
+            margin-bottom: 12px;
+        }
+
+        .phone-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .toggle-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #000;
+        }
+
+        .cat-nav::-webkit-scrollbar { display: none; }
+        
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 30px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+            scroll-margin-top: 120px;
+        }
+
+        .item-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            transition: transform 0.2s;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .item-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-inline-start: 12px;
+            white-space: nowrap;
+        }
+
+        .item-desc {
+            font-size: 13px;
+            color: var(--sub);
+            margin: 0;
+        }
+
+        .badge {
+            font-size: 11px; 
+            padding: 2px 8px; 
+            border-radius: 6px; 
+            background: var(--accent); 
+            color: #000; 
+            margin-inline-start: 6px; 
+            font-weight: 600;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+
+        [lang="ar"] { font-family: var(--font-ar); text-align: right; }
+        [lang="ar"] .badge { font-size: 10px; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1 class="business-name">Gourmet Garden</h1>
+        <p class="business-desc" id="header-desc">Modern fusion cuisine with organic ingredients.</p>
+        <a href="tel:+971 50 123 4567" class="phone-link">📞 +971 50 123 4567</a>
+    </header>
+
+    <div class="lang-toggle">
+        <button id="btn-en" class="toggle-btn active" onclick="switchLang('en')">English</button>
+        <button id="btn-ar" class="toggle-btn" onclick="switchLang('ar')" style="margin-left: 8px;">العربية</button>
+    </div>
+
+    <!-- English Menu Section -->
+    <div id="section-en">
+        <div style="margin-bottom: 14px;">
+            <input type="text" id="menu-search-en" placeholder="🔍 Search menu..." onkeyup="filterMenu('en')" style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; outline: none; box-sizing: border-box;" />
+        </div>
+
+        <div class="cat-nav" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 16px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg); z-index: 10;">
+            <a href="#en-starters" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text); text-decoration: none; white-space: nowrap;">Starters</a>
+            <a href="#en-mains" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text); text-decoration: none; white-space: nowrap;">Main Courses</a>
+            <a href="#en-drinks" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text); text-decoration: none; white-space: nowrap;">Drinks</a>
+        </div>
+
+        <div id="en-starters">
+            <h2 class="category-title">Starters</h2>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">Truffle Fries</span>
+                    <span class="item-price">35 AED</span>
+                </div>
+                <p class="item-desc">Crispy fries tossed in white truffle oil, topped with aged parmesan and fresh parsley.</p>
+            </div>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">Wagyu Sliders <span class="badge">Best Seller</span></span>
+                    <span class="item-price">65 AED</span>
+                </div>
+                <p class="item-desc">Three mini wagyu beef patties with cheddar cheese, caramelized onions, and house secret sauce.</p>
+            </div>
+        </div>
+
+        <div id="en-mains">
+            <h2 class="category-title">Main Courses</h2>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">Grilled Salmon</span>
+                    <span class="item-price">95 AED</span>
+                </div>
+                <p class="item-desc">Pan-seared Atlantic salmon fillet served with grilled asparagus and lemon-butter glaze.</p>
+            </div>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">Ribeye Steak <span class="badge">Popular</span></span>
+                    <span class="item-price">145 AED</span>
+                </div>
+                <p class="item-desc">300g premium grass-fed ribeye served with peppercorn sauce and creamy mashed potatoes.</p>
+            </div>
+        </div>
+
+        <div id="en-drinks">
+            <h2 class="category-title">Drinks</h2>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">Mint Lemonade</span>
+                    <span class="item-price">25 AED</span>
+                </div>
+                <p class="item-desc">Refreshing house-made blend of fresh mint, zesty lemon, and a touch of honey.</p>
+            </div>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">Espresso</span>
+                    <span class="item-price">18 AED</span>
+                </div>
+                <p class="item-desc">Rich and intense double shot of our specialty roast beans.</p>
+            </div>
+        </div>
+
+        <div class="menu-footer" style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--sub); text-align: center; line-height: 1.5;">
+            Prices inclusive of 5% VAT. Please inform your server of any allergies.
+        </div>
+    </div>
+
+    <!-- Arabic Menu Section -->
+    <div id="section-ar" class="hidden" dir="rtl" lang="ar">
+        <div style="margin-bottom: 14px;">
+            <input type="text" id="menu-search-ar" placeholder="🔍 ابحث في القائمة..." onkeyup="filterMenu('ar')" style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; outline: none; box-sizing: border-box;" />
+        </div>
+
+        <div class="cat-nav" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 16px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg); z-index: 10;">
+            <a href="#ar-starters" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text); text-decoration: none; white-space: nowrap;">المقبلات</a>
+            <a href="#ar-mains" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text); text-decoration: none; white-space: nowrap;">الأطباق الرئيسية</a>
+            <a href="#ar-drinks" style="padding: 6px 14px; font-size: 13px; font-weight: 600; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text); text-decoration: none; white-space: nowrap;">المشروبات</a>
+        </div>
+
+        <div id="ar-starters">
+            <h2 class="category-title">المقبلات</h2>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">بطاطس الترافل</span>
+                    <span class="item-price">35 درهم</span>
+                </div>
+                <p class="item-desc">بطاطس مقرمشة بزيت الترافل الأبيض، مغطاة بجبن البارميزان والبقدونس الطازج.</p>
+            </div>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">واغيو سلايدرز <span class="badge">الأكثر طلباً</span></span>
+                    <span class="item-price">65 درهم</span>
+                </div>
+                <p class="item-desc">ثلاث قطع ميني برجر واغيو مع جبن الشيدر، بصل مكرمل وصوصنا الخاص.</p>
+            </div>
+        </div>
+
+        <div id="ar-mains">
+            <h2 class="category-title">الأطباق الرئيسية</h2>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">سلمون مشوي</span>
+                    <span class="item-price">95 درهم</span>
+                </div>
+                <p class="item-desc">فيليه سلمون مشوي يقدم مع الهليون المشوي وصوص الليمون والزبدة.</p>
+            </div>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">ريب آي ستيك <span class="badge">جديد</span></span>
+                    <span class="item-price">145 درهم</span>
+                </div>
+                <p class="item-desc">٣٠٠ جرام ريب آي فاخر يقدم مع صوص الفلفل وبطاطس مهروسة كريمية.</p>
+            </div>
+        </div>
+
+        <div id="ar-drinks">
+            <h2 class="category-title">المشروبات</h2>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">ليمون بالنعناع</span>
+                    <span class="item-price">25 درهم</span>
+                </div>
+                <p class="item-desc">مزيج منعش من النعناع الطازج، الليمون الحامض، ولمسة من العسل.</p>
+            </div>
+            <div class="item-box">
+                <div class="item-header">
+                    <span class="item-name">إسبريسو</span>
+                    <span class="item-price">18 درهم</span>
+                </div>
+                <p class="item-desc">جرعة مزدوجة غنية ومكثفة من حبوب القهوة المختصة.</p>
+            </div>
+        </div>
+
+        <div class="menu-footer" style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--sub); text-align: center; line-height: 1.5;">
+            الأسعار تشمل 5٪ ضريبة القيمة المضافة. يرجى إبلاغ موظفينا بأي نوع من الحساسية.
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchLang(lang) {
+        const enSection = document.getElementById('section-en');
+        const arSection = document.getElementById('section-ar');
+        const btnEn = document.getElementById('btn-en');
+        const btnAr = document.getElementById('btn-ar');
+        const headerDesc = document.getElementById('header-desc');
+
+        if (lang === 'en') {
+            enSection.classList.remove('hidden');
+            arSection.classList.add('hidden');
+            btnEn.classList.add('active');
+            btnAr.classList.remove('active');
+            document.body.dir = "ltr";
+            headerDesc.innerText = "Modern fusion cuisine with organic ingredients.";
+        } else {
+            enSection.classList.add('hidden');
+            arSection.classList.remove('hidden');
+            btnEn.classList.remove('active');
+            btnAr.classList.add('active');
+            document.body.dir = "rtl";
+            headerDesc.innerText = "مأكولات عصرية متنوعة بمكونات عضوية طبيعية.";
+        }
+    }
+
+    function filterMenu(lang) {
+        const inputId = lang === 'en' ? 'menu-search-en' : 'menu-search-ar';
+        const sectionId = lang === 'en' ? 'section-en' : 'section-ar';
+        const input = document.getElementById(inputId).value.toLowerCase();
+        const items = document.querySelectorAll(`#${sectionId} .item-box`);
+        
+        items.forEach(function(el) {
+            const text = el.innerText.toLowerCase();
+            el.style.display = text.indexOf(input) > -1 ? '' : 'none';
+        });
+    }
+</script>
+
+</body>
+</html>
