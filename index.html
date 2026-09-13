@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gilded Fork | Digital Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Noto+Sans+Arabic:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0c0c0c;
+            --text: #f4f4f4;
+            --card: #181818;
+            --accent: #c5a059;
+            --sub: #999999;
+            --border: #2a2a2a;
+            --shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #000;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--bg);
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        /* Header & Navigation */
+        header {
+            padding: 40px 20px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .business-name {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .description {
+            font-size: 14px;
+            color: var(--sub);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Search & Categories */
+        .sticky-controls {
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-bar {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent);
+        }
+
+        .categories {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-pill {
+            padding: 8px 18px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            font-size: 13px;
+            color: var(--sub);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .cat-pill:active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Menu Items */
+        .menu-section {
+            padding: 20px;
+        }
+
+        .category-title {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            color: var(--accent);
+            margin: 30px 0 20px;
+            border-left: 3px solid var(--accent);
+            padding-left: 12px;
+            text-transform: uppercase;
+        }
+
+        .rtl .category-title {
+            border-left: none;
+            border-right: 3px solid var(--accent);
+            padding-left: 0;
+            padding-right: 12px;
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+
+        .item-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text);
+        }
+
+        .item-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .item-desc {
+            font-size: 13px;
+            color: var(--sub);
+            font-weight: 300;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .badge-popular { background: #d4af37; color: #000; }
+        .badge-new { background: #22c55e; color: #000; }
+        .badge-spicy { background: #ef4444; color: #fff; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .footer-note {
+            font-size: 12px;
+            color: var(--sub);
+            margin-bottom: 10px;
+        }
+
+        .phone-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Language visibility */
+        [lang="ar"] { display: none; }
+        .rtl { direction: rtl; font-family: 'Noto Sans Arabic', sans-serif; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <header>
+        <h1 class="business-name">The Gilded Fork</h1>
+        <p class="description" id="header-desc">Experience the pinnacle of Mediterranean fine dining with a modern twist.</p>
+        
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+            <button class="lang-btn" onclick="setLanguage('ar')">العربية</button>
+        </div>
+    </header>
+
+    <div class="sticky-controls">
+        <input type="text" class="search-bar" id="search" placeholder="Search for items..." onkeyup="filterMenu()">
+        <div class="categories" id="cat-list">
+            <!-- Dynamic Category Pills -->
+        </div>
+    </div>
+
+    <!-- English Menu -->
+    <div id="en-menu" class="lang-section">
+        <section class="menu-section">
+            <h2 class="category-title" id="cat-starters">Starters</h2>
+            
+            <div class="item-card" data-name="truffle burrata">
+                <div class="item-header">
+                    <span class="item-name">Truffle Burrata</span>
+                    <span class="item-price">$24</span>
+                </div>
+                <p class="item-desc">Creamy burrata cheese, black truffle shavings, heirloom tomatoes, and aged balsamic glaze.</p>
+                <div><span class="badge badge-popular">Best Seller</span></div>
+            </div>
+
+            <div class="item-card" data-name="seared scallops">
+                <div class="item-header">
+                    <span class="item-name">Seared Scallops</span>
+                    <span class="item-price">$28</span>
+                </div>
+                <p class="item-desc">Pan-seared Atlantic scallops served with cauliflower purée and crispy pancetta.</p>
+                <div><span class="badge badge-new">New</span></div>
+            </div>
+
+            <h2 class="category-title" id="cat-mains">Main Courses</h2>
+
+            <div class="item-card" data-name="wagyu ribeye steak">
+                <div class="item-header">
+                    <span class="item-name">Wagyu Ribeye Steak</span>
+                    <span class="item-price">$95</span>
+                </div>
+                <p class="item-desc">Grade A5 Wagyu, garlic herb butter, roasted asparagus, and truffle mashed potatoes.</p>
+                <div><span class="badge badge-popular">Signature</span></div>
+            </div>
+
+            <div class="item-card" data-name="spicy lobster pasta">
+                <div class="item-header">
+                    <span class="item-name">Spicy Lobster Pasta</span>
+                    <span class="item-price">$62</span>
+                </div>
+                <p class="item-desc">Fresh linguine, butter-poached lobster tail, chili flakes, and cherry tomato confit.</p>
+                <div><span class="badge badge-spicy">Spicy</span></div>
+            </div>
+
+            <h2 class="category-title" id="cat-desserts">Desserts</h2>
+
+            <div class="item-card" data-name="gold leaf chocolate fondant">
+                <div class="item-header">
+                    <span class="item-name">Gold Leaf Chocolate Fondant</span>
+                    <span class="item-price">$18</span>
+                </div>
+                <p class="item-desc">Warm dark chocolate cake with a molten center, topped with 24k edible gold leaf.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Arabic Menu -->
+    <div id="ar-menu" class="lang-section" style="display: none;">
+        <section class="menu-section">
+            <h2 class="category-title" id="cat-starters-ar">المقبلات</h2>
+            
+            <div class="item-card" data-name="بوراتا الترافل">
+                <div class="item-header">
+                    <span class="item-name">بوراتا الترافل</span>
+                    <span class="item-price">24 $</span>
+                </div>
+                <p class="item-desc">جبنة البوراتا الكريمية، رقائق الترافل الأسود، طماطم كرزية، وبلسميك معتق.</p>
+                <div><span class="badge badge-popular">الأكثر طلباً</span></div>
+            </div>
+
+            <div class="item-card" data-name="سكالوب مشوح">
+                <div class="item-header">
+                    <span class="item-name">سكالوب مشوح</span>
+                    <span class="item-price">28 $</span>
+                </div>
+                <p class="item-desc">سكالوب أطلسي مشوح يقدم مع مهروس القرنبيط والبانشيتا المقرمشة.</p>
+                <div><span class="badge badge-new">جديد</span></div>
+            </div>
+
+            <h2 class="category-title" id="cat-mains-ar">الأطباق الرئيسية</h2>
+
+            <div class="item-card" data-name="ستيك واجيو ريب آي">
+                <div class="item-header">
+                    <span class="item-name">ستيك واجيو ريب آي</span>
+                    <span class="item-price">95 $</span>
+                </div>
+                <p class="item-desc">واجيو درجة A5، زبدة الأعشاب بالثوم، هليون مشوي، وبطاطس مهروسة بالترافل.</p>
+                <div><span class="badge badge-popular">طبقنا الخاص</span></div>
+            </div>
+
+            <div class="item-card" data-name="باستا الاستاكوزا الحارة">
+                <div class="item-header">
+                    <span class="item-name">باستا الاستاكوزا الحارة</span>
+                    <span class="item-price">62 $</span>
+                </div>
+                <p class="item-desc">لينجويني طازج، ذيل استاكوزا مطهو بالزبدة، رقائق الفلفل الحار، وطماطم كرزية.</p>
+                <div><span class="badge badge-spicy">حار</span></div>
+            </div>
+
+            <h2 class="category-title" id="cat-desserts-ar">الحلويات</h2>
+
+            <div class="item-card" data-name="فوندان الشوكولاتة بلمسة الذهب">
+                <div class="item-header">
+                    <span class="item-name">فوندان الشوكولاتة بلمسة الذهب</span>
+                    <span class="item-price">18 $</span>
+                </div>
+                <p class="item-desc">كيك الشوكولاتة الداكنة الدافئة بقلب ذائب، مزينة بورق الذهب عيار 24 القابل للأكل.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p class="footer-note" id="footer-text">Prices are inclusive of VAT. Please inform us of any allergies.</p>
+        <p class="footer-note">Contact us: <a href="tel:+123456789" class="phone-link">+123 456 789</a></p>
+    </footer>
+</div>
+
+<script>
+    const enCats = [
+        { name: 'Starters', id: 'cat-starters' },
+        { name: 'Mains', id: 'cat-mains' },
+        { name: 'Desserts', id: 'cat-desserts' }
+    ];
+
+    const arCats = [
+        { name: 'المقبلات', id: 'cat-starters-ar' },
+        { name: 'الأطباق الرئيسية', id: 'cat-mains-ar' },
+        { name: 'الحلويات', id: 'cat-desserts-ar' }
+    ];
+
+    function setLanguage(lang) {
+        const container = document.getElementById('main-container');
+        const enMenu = document.getElementById('en-menu');
+        const arMenu = document.getElementById('ar-menu');
+        const searchInput = document.getElementById('search');
+        const headerDesc = document.getElementById('header-desc');
+        const footerText = document.getElementById('footer-text');
+        const btns = document.querySelectorAll('.lang-btn');
+
+        btns.forEach(btn => btn.classList.remove('active'));
+        
+        if (lang === 'ar') {
+            enMenu.style.display = 'none';
+            arMenu.style.display = 'block';
+            container.classList.add('rtl');
+            searchInput.placeholder = 'ابحث عن الأطباق...';
+            headerDesc.innerText = 'استمتع بتجربة طعام متوسطية فاخرة بلمسة عصرية.';
+            footerText.innerText = 'الأسعار تشمل ضريبة القيمة المضافة. يرجى إبلاغنا بأي حساسية تجاه الطعام.';
+            btns[1].classList.add('active');
+            renderCategories(arCats);
+        } else {
+            arMenu.style.display = 'none';
+            enMenu.style.display = 'block';
+            container.classList.remove('rtl');
+            searchInput.placeholder = 'Search for items...';
+            headerDesc.innerText = 'Experience the pinnacle of Mediterranean fine dining with a modern twist.';
+            footerText.innerText = 'Prices are inclusive of VAT. Please inform us of any allergies.';
+            btns[0].classList.add('active');
+            renderCategories(enCats);
+        }
+    }
+
+    function renderCategories(cats) {
+        const list = document.getElementById('cat-list');
+        list.innerHTML = cats.map(cat => `
+            <a href="#${cat.id}" class="cat-pill">${cat.name}</a>
+        `).join('');
+    }
+
+    function filterMenu() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const items = document.querySelectorAll('.item-card');
+        
+        items.forEach(item => {
+            const name = item.getAttribute('data-name').toLowerCase();
+            const desc = item.querySelector('.item-desc').innerText.toLowerCase();
+            if (name.includes(query) || desc.includes(query)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Initialize
+    renderCategories(enCats);
+</script>
+
+</body>
+</html>
